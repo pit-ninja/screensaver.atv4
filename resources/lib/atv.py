@@ -131,7 +131,12 @@ class Screensaver(xbmcgui.WindowXML):
 
     def start_playback(self):
         self.playindex = 0
-        self.atv4player.play(self.video_playlist[self.playindex], windowed=True)
+        
+        # Set the location property for the XML to read
+        self.setProperty('AerialLocation', self.video_playlist[self.playindex]["location"])
+        # Play the URL
+        self.atv4player.play(self.video_playlist[self.playindex]["url"], windowed=True)
+        
         while self.active and not monitor.abortRequested():
             monitor.waitForAbort(1)
             # If we finish playing the video
@@ -141,8 +146,11 @@ class Screensaver(xbmcgui.WindowXML):
                     self.playindex += 1
                 else:
                     self.playindex = 0
+                
+                # Update the location property for the next video
+                self.setProperty('AerialLocation', self.video_playlist[self.playindex]["location"])
                 # Using the updated iterator, start playing the next video
-                self.atv4player.play(self.video_playlist[self.playindex], windowed=True)
+                self.atv4player.play(self.video_playlist[self.playindex]["url"], windowed=True)
 
 
 def run(params=False):

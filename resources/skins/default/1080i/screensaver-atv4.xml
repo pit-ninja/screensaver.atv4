@@ -64,5 +64,37 @@
 		    <height>1080</height>
 		    <visible>true</visible>
 		</control>
+		<control type="grouplist" id="32504">
+				<left>60</left>
+				<bottom>60</bottom>
+				<width>800</width>
+				<!-- Expanded to 90 to hold the two taller labels -->
+				<height>90</height> 
+				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<control type="label">
+						<width>800</width>
+						<!-- Expanded to 50 -->
+						<height>50</height> 
+						<font>font_head_bold</font> 
+						<textcolor>FFFFFFFF</textcolor> 
+						<shadowcolor>FF000000</shadowcolor> 
+						<aligny>bottom</aligny>
+						<align>left</align>
+						<label>$INFO[Window.Property(AerialLocation)]</label>
+				</control>
+				<control type="label">
+						<width>800</width>
+						<!-- Expanded to 40 to protect the commas -->
+						<height>40</height> 
+						<font>font_main</font> 
+						<textcolor>FFFFFFFF</textcolor> 
+						<shadowcolor>FF000000</shadowcolor>
+						<!-- Switched to top so it hugs the line above it -->
+						<aligny>top</aligny> 
+						<align>left</align>
+						<label>$INFO[System.Date], $INFO[System.Time]</label>
+				</control>
+		</control>
    </controls>
 </window>

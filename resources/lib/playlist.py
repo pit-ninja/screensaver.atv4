@@ -80,6 +80,7 @@ class AtvPlaylist:
                 # Each block contains a location/scene whose name is stored in accessibilityLabel. These may recur
                 # Retrieve the location name
                 location = block["accessibilityLabel"]
+                
                 try:
                     # Get the corresponding setting Bool by adding "enable-" + lowercase + no whitespace
                     current_location_enabled = addon.getSettingBool("enable-" + location.lower().replace(" ", ""))
@@ -122,7 +123,7 @@ class AtvPlaylist:
                 # If the file exists locally or we're not in offline mode, add it to the playlist
                 if exists_on_disk or not self.force_offline:
                     xbmc.log("Adding video for location {} to playlist".format(location), level=xbmc.LOGDEBUG)
-                    self.playlist.append(url)
+                    self.playlist.append({"url": url, "location": location})
 
             # Now that we're done building the playlist, shuffle and return to the caller
             shuffle(self.playlist)
