@@ -130,28 +130,51 @@ class Screensaver(xbmcgui.WindowXML):
         self.clearAll()
 
     def start_playback(self):
-        self.playindex = 0
+        # 1. Setup the native Kodi Playlist
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
         
-        # Set the location property for the XML to read
-        self.setProperty('AerialLocation', self.video_playlist[self.playindex]["location"])
-        # Play the URL
-        self.atv4player.play(self.video_playlist[self.playindex]["url"], windowed=True)
+        # We need a quick dictionary to map URLs back to Locations for our polling loop
+        url_to_location = {}
         
+        # Populate the Kodi playlist with our array
+        for video in self.video_playlist:
+            url = video["url"]
+            location = video["location"]
+            
+            # Create a basic ListItem so Kodi knows what it is handling
+            list_item = xbmcgui.ListItem(location)
+            playlist.add(url=url, listitem=list_item)
+            
+            # Store the mapping for the text overlay
+            url_to_location[url] = location
+
+        # 2. Command Kodi to play the entire playlist at once
+        self.atv4player.play(playlist, windowed=True)
+        
+        current_playing_url = None
+        
+        # 3. Monitor loop to update the text and handle looping
         while self.active and not monitor.abortRequested():
             monitor.waitForAbort(1)
-            # If we finish playing the video
-            if not self.atv4player.isPlaying() and self.active:
-                # Increment the iterator used to access the array or reset to 0
-                if self.playindex < len(self.video_playlist) - 1:
-                    self.playindex += 1
-                else:
-                    self.playindex = 0
-                
-                # Update the location property for the next video
-                self.setProperty('AerialLocation', self.video_playlist[self.playindex]["location"])
-                # Using the updated iterator, start playing the next video
-                self.atv4player.play(self.video_playlist[self.playindex]["url"], windowed=True)
-
+            
+            if self.active and self.atv4player.isPlaying():
+                try:
+                    # Ask Kodi what specific URL is currently rendering
+                    playing_url = self.atv4player.getPlayingFile()
+                    
+                    # If the URL changed since the last second, update the overlay!
+                    if playing_url != current_playing_url:
+                        current_playing_url = playing_url
+                        new_location = url_to_location.get(playing_url, "")
+                        self.setProperty('AerialLocation', new_location)
+                except Exception:
+                    # getPlayingFile() can occasionally throw an error exactly during a gapless transition
+                    pass
+                    
+            # If the entire playlist reaches the very end, start it over
+            elif self.active and not self.atv4player.isPlaying():
+                self.atv4player.play(playlist, windowed=True)
 
 def run(params=False):
     if not params:
