@@ -449,3 +449,8 @@ msgstr ""
 msgctxt "#32134"
 msgid "Aerial information brightness"
 msgstr ""
+
+msgctxt "#32135"
+msgid "Fade In Delay (seconds)"
+msgstr ""
+

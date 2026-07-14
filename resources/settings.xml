@@ -14,6 +14,18 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
+				<setting id="fade-delay" type="number" label="32135" help="">
+					<level>0</level>
+					<default>1.0</default>
+					<constraints>
+						<minimum>0.0</minimum>
+						<step>0.1</step>
+						<maximum>10.0</maximum>
+					</constraints>
+					<control type="slider" format="number">
+						<format>{:.1f}</format>
+					</control>
+				</setting>
 				<setting id="ce-dv-follow" type="boolean" label="32133" help="">
 					<level>0</level>
 					<default>true</default>

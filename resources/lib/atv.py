@@ -77,8 +77,8 @@ class Screensaver(xbmcgui.WindowXML):
                     if delta >= self.max_allowed_time:
                         self.activateDPMS()
                         break
-                    monitor.waitForAbort(1)
-                    delta += 1
+                    monitor.waitForAbort(0.05)
+                    delta += 0.05
         else:
             self.novideos()
 
@@ -162,14 +162,19 @@ class Screensaver(xbmcgui.WindowXML):
         self.atv4player.play(playlist, windowed=True)
         
         current_playing_url = None
-        is_transitioning = True 
+        is_transitioning = True
+        
+        try:
+            fade_delay = float(addon.getSetting("fade-delay"))
+        except Exception:
+            fade_delay = 1.0
         
         while self.active and not monitor.abortRequested():
             if not xbmc.getCondVisibility("System.ScreenSaverActive"):
                 self.onAction(None)
                 break
                 
-            monitor.waitForAbort(0.25)
+            monitor.waitForAbort(0.05)
             
             if self.active and self.atv4player.isPlaying():
                 try:
@@ -183,10 +188,10 @@ class Screensaver(xbmcgui.WindowXML):
                         new_location = url_to_location.get(playing_url, "")
                         self.setProperty('AerialLocation', new_location)
                     
-                    if total_time > 0 and (total_time - current_time) <= 3:
+                    if total_time > 0 and (total_time - current_time) <= 2.5:
                         is_transitioning = True
                         
-                    elif is_transitioning and 0.5 <= current_time < 10.0:
+                    elif is_transitioning and fade_delay <= current_time < (fade_delay + 10.0):
                         is_transitioning = False
 
                     if is_transitioning:
@@ -201,16 +206,16 @@ class Screensaver(xbmcgui.WindowXML):
             elif self.active and not self.atv4player.isPlaying():
                 self.setProperty("fade-black", "true")
                 
-                # Debounce: Wait up to 2 seconds to let Kodi natively load the next file
+                # Debounce: Wait up to 3 seconds to let Kodi natively load the next file
                 recovery_ticks = 0
-                while self.active and not self.atv4player.isPlaying() and recovery_ticks < 8:
+                while self.active and not self.atv4player.isPlaying() and recovery_ticks < 60:
                     if not xbmc.getCondVisibility("System.ScreenSaverActive"):
                         self.onAction(None)
                         break
-                    monitor.waitForAbort(0.25)
+                    monitor.waitForAbort(0.05)
                     recovery_ticks += 1
                 
-                # If it is STILL stopped after 2 seconds, the playlist naturally ended or network dropped
+                # If it is STILL stopped after 3 seconds, the playlist naturally ended or network dropped
                 if self.active and not self.atv4player.isPlaying():
                     self.atv4player.play(playlist, windowed=True)
 
