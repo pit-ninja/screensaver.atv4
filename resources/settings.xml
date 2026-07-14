@@ -8,11 +8,7 @@
 					<default>false</default>
 					<control type="toggle"/>
 				</setting>
-				<setting id="show-previewwindow" type="boolean" label="32042" help="">
-					<level>0</level>
-					<default>false</default>
-					<control type="toggle"/>
-				</setting>
+
 				<setting id="show-info" type="boolean" label="22081" help="">
 					<level>0</level>
 					<default>false</default>
