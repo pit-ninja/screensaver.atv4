@@ -71,6 +71,9 @@ class Screensaver(xbmcgui.WindowXML):
             if self.max_allowed_time:
                 delta = 0
                 while self.active:
+                    if not xbmc.getCondVisibility("System.ScreenSaverActive"):
+                        self.onAction(None)
+                        break
                     if delta >= self.max_allowed_time:
                         self.activateDPMS()
                         break
@@ -162,6 +165,10 @@ class Screensaver(xbmcgui.WindowXML):
         is_transitioning = True 
         
         while self.active and not monitor.abortRequested():
+            if not xbmc.getCondVisibility("System.ScreenSaverActive"):
+                self.onAction(None)
+                break
+                
             monitor.waitForAbort(0.25)
             
             if self.active and self.atv4player.isPlaying():
@@ -197,6 +204,9 @@ class Screensaver(xbmcgui.WindowXML):
                 # Debounce: Wait up to 2 seconds to let Kodi natively load the next file
                 recovery_ticks = 0
                 while self.active and not self.atv4player.isPlaying() and recovery_ticks < 8:
+                    if not xbmc.getCondVisibility("System.ScreenSaverActive"):
+                        self.onAction(None)
+                        break
                     monitor.waitForAbort(0.25)
                     recovery_ticks += 1
                 
