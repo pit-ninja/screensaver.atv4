@@ -1,3 +1,7 @@
+v15.3.0.3 (2026-07-18)
+- Remove legacy loading screen assets and fallback Python logic to prevent crashes with custom skin layouts
+- Finalize layout integration for Arctic Fuse 3 override compatibility
+
 v14.3.0.3 (2026-07-18)
 - Complete visual overhaul of XML layouts to natively support Kodi's default Estuary skin
 

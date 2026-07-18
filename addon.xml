@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="screensaver.atv4" name="Aerial" version="14.3.0.3" provider-name="pit-ninja">
+<addon id="screensaver.atv4" name="Aerial" version="15.3.0.3" provider-name="pit-ninja">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
@@ -17,7 +17,11 @@
 		<summary lang="es_ES">Protector de pantalla Apple TV para Kodi</summary>
 		<description lang="en_GB">This screensaver addon provides Apple TV aerial screensavers in Kodi</description>
     	<description lang="es_ES">Este complemento habilita el protector de pantalla Aerial de Apple TV para Kodi</description>
-		<news>v14.3.0.3 (2026-07-18)
+		<news>v15.3.0.3 (2026-07-18)
+- Remove legacy loading screen assets and fallback Python logic to prevent crashes with custom skin layouts
+- Finalize layout integration for Arctic Fuse 3 override compatibility
+
+v14.3.0.3 (2026-07-18)
 - Complete visual overhaul of XML layouts to natively support Kodi's default Estuary skin
 
 v13.3.0.3 (2026-07-18)

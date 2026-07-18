@@ -51,7 +51,6 @@ class Screensaver(xbmcgui.WindowXML):
         self.original_dv_luminance = None
 
     def onInit(self):
-        self.getControl(32502).setLabel(translate(32008))
         self.setProperty("screensaver-atv4-loading", "true")
         self.setProperty("show-info", addon.getSetting("show-info"))
 
@@ -131,11 +130,7 @@ class Screensaver(xbmcgui.WindowXML):
 
     def novideos(self):
         self.setProperty("screensaver-atv4-loading", "false")
-        if addon.getSettingBool("force-offline"):
-            self.getControl(32503).setLabel("Missing Apple payload. Please disable 'Offline Mode' to download.")
-        else:
-            self.getControl(32503).setLabel(translate(32048))
-        self.getControl(32503).setVisible(True)
+        pass
 
     @classmethod
     def toTransparent(self):
