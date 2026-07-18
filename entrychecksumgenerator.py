@@ -18,7 +18,7 @@ from urllib import request
 
 apple_local_feed = os.path.join("resources", "entries.json")
 tmp_folder = "tmpvideos"
-apple_resources_tar = "https://sylvan.apple.com/Aerials/resources-15.tar"
+apple_resources_tar = "http://sylvan.apple.com/Aerials/resources-16.tar"
 local_tar = "resources.tar"
 
 
@@ -29,8 +29,11 @@ def get_latest_entries_from_apple():
     request.urlretrieve(apple_resources_tar, local_tar)
     # https://www.tutorialspoint.com/How-are-files-extracted-from-a-tar-file-using-Python
     apple_tar = tarfile.open(local_tar)
-    print("Extracting entries.json from resources.tar and placing in ./resources")
+    print("Extracting entries.json and strings from resources.tar and placing in ./resources")
     apple_tar.extract("entries.json", "resources")
+    for member in apple_tar.getmembers():
+        if member.name.startswith("TVIdleScreenStrings.bundle/"):
+            apple_tar.extract(member, "resources")
     apple_tar.close()
     os.remove(local_tar)
 

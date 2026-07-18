@@ -18,7 +18,7 @@ import xbmcvfs
 from .commonatv import addon, addon_path, find_ranked_key_in_dict, compute_block_key_list
 
 # Apple's URL of the resources.tar file containing entries.json
-apple_resources_tar_url = "http://sylvan.apple.com/Aerials/resources-15.tar"
+apple_resources_tar_url = "http://sylvan.apple.com/Aerials/resources-16.tar"
 
 # Local temporary save location of the Apple TAR file
 apple_local_tar_path = os.path.join(addon_path, "resources.tar")
@@ -35,8 +35,11 @@ def get_latest_entries_from_apple():
     request.urlretrieve(apple_resources_tar_url, apple_local_tar_path)
     # https://www.tutorialspoint.com/How-are-files-extracted-from-a-tar-file-using-Python
     apple_tar = tarfile.open(apple_local_tar_path)
-    xbmc.log("Extracting entries.json from resources.tar and placing in ./resources", level=xbmc.LOGDEBUG)
+    xbmc.log("Extracting entries.json and strings from resources.tar and placing in ./resources", level=xbmc.LOGDEBUG)
     apple_tar.extract("entries.json", os.path.join(addon_path, "resources"))
+    for member in apple_tar.getmembers():
+        if member.name.startswith("TVIdleScreenStrings.bundle/"):
+            apple_tar.extract(member, os.path.join(addon_path, "resources"))
 
     apple_tar.close()
     xbmc.log("Deleting resources.tar now that we've grabbed entries.json from it", level=xbmc.LOGDEBUG)
@@ -49,8 +52,16 @@ class AtvPlaylist:
         # Set a class variable as the Bool response of our Setting.
         self.force_offline = addon.getSettingBool("force-offline")
         if not xbmc.getCondVisibility("Player.HasMedia"):
-            # If we're not forcing offline state and not using custom JSON:
-            if not self.force_offline and addon.getSettingBool("get-videos-from-apple"):
+            # If the payload or strings are missing locally, we MUST download it, overriding all user settings
+            strings_dir = os.path.join(addon_path, "resources", "TVIdleScreenStrings.bundle", "en.lproj")
+            if not xbmcvfs.exists(local_entries_json_path) or not xbmcvfs.exists(strings_dir):
+                xbmc.log(msg="Apple payload or strings are missing locally. Forcing download regardless of user settings to prevent crash.", level=xbmc.LOGINFO)
+                try:
+                    get_latest_entries_from_apple()
+                except Exception:
+                    xbmc.log(msg="Caught an exception while retrieving Apple's resources.tar to extract entries.json", level=xbmc.LOGWARNING)
+            # If we're not forcing offline state, we can still update it if they opted in
+            elif not self.force_offline and addon.getSettingBool("get-videos-from-apple"):
                 try:
                     # Update local JSON with the copy from Apple
                     get_latest_entries_from_apple()
@@ -59,8 +70,12 @@ class AtvPlaylist:
                     xbmc.log(msg="Caught an exception while retrieving Apple's resources.tar to extract entries.json",
                              level=xbmc.LOGWARNING)
             # Regardless of if we grabbed new Apple JSON, hit an exception, or are in offline mode, load the local copy
-            with open(local_entries_json_path, "r") as f:
-                self.top_level_json = json.loads(f.read())
+            try:
+                with open(local_entries_json_path, "r") as f:
+                    self.top_level_json = json.loads(f.read())
+            except Exception as e:
+                xbmc.log(msg=f"Could not load local entries.json payload: {e}", level=xbmc.LOGERROR)
+                self.top_level_json = {}
         else:
             self.top_level_json = {}
 
@@ -123,7 +138,7 @@ class AtvPlaylist:
                 # If the file exists locally or we're not in offline mode, add it to the playlist
                 if exists_on_disk or not self.force_offline:
                     xbmc.log("Adding video for location {} to playlist".format(location), level=xbmc.LOGDEBUG)
-                    self.playlist.append({"url": url, "location": location})
+                    self.playlist.append({"url": url, "location": location, "pointsOfInterest": block.get("pointsOfInterest", {})})
 
             # Now that we're done building the playlist, shuffle and return to the caller
             shuffle(self.playlist)

@@ -1,3 +1,10 @@
+v13.3.0.3 (2026-07-18)
+- Implement location string localization via Apple's TVIdleScreenStrings bundle
+- Add support for dynamically updating Point of Interest (POI) waypoints during video playback
+- Implement smart line-wrapping logic to automatically break extremely long location strings across two lines
+- Rearrange OSD text layout and drop the date field for a cleaner visual aesthetic
+- Update payload URL
+
 v12.3.0.3 (2026-07-14)
 - Remove unused preview window code
 - Add fade delay setting for transitions between videos (default: 1.0s)

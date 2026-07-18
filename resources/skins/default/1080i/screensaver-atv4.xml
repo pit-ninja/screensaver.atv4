@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <window type="window">
     <controls>
     	<control type="image">
@@ -83,7 +83,7 @@
 
 		<control type="grouplist" id="32504">
 		        <!-- Render text only when show-info is true AND the shutter is currently open (false) -->
-				<visible>String.IsEqual(Window.Property(show-info),true) + String.IsEqual(Window.Property(fade-black),false)</visible>
+				<visible>String.IsEqual(Window.Property(show-info),true) + String.IsEqual(Window.Property(fade-black),false) + String.IsEqual(Window.Property(poi-fade-out),false)</visible>
 				<!-- When True: Fade in from transparent -->
 				<animation effect="fade" start="0" end="100" time="2000">Visible</animation>
 				<!-- When False: Fade out to transparent -->
@@ -91,29 +91,55 @@
 				
 				<left>60</left>
 				<bottom>60</bottom>
-				<width>800</width>
-				<height>90</height> 
+				<width>1800</width>
+				<height>100</height> 
 				<itemgap>0</itemgap>
 				<orientation>vertical</orientation>
 				<control type="label">
-						<width>800</width>
+						<width>1800</width>
 						<height>50</height> 
 						<font>font_head_bold</font> 
 						<textcolor>FFFFFFFF</textcolor> 
 						<shadowcolor>FF000000</shadowcolor> 
 						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[Window.Property(AerialLocation)]</label>
+						<label>$INFO[Window.Property(AerialLocationLine1)]</label>
 				</control>
 				<control type="label">
-						<width>800</width>
-						<height>40</height> 
-						<font>font_main</font> 
+						<width>1800</width>
+						<height>50</height> 
+						<font>font_head_bold</font> 
 						<textcolor>FFFFFFFF</textcolor> 
-						<shadowcolor>FF000000</shadowcolor>
-						<aligny>top</aligny> 
+						<shadowcolor>FF000000</shadowcolor> 
+						<aligny>bottom</aligny>
 						<align>left</align>
-						<label>$INFO[System.Date], $INFO[System.Time]</label>
+						<label>$INFO[Window.Property(AerialLocationLine2)]</label>
+				</control>
+		</control>
+
+		<control type="grouplist" id="32505">
+				<!-- Render text only when show-info is true AND the shutter is currently open (false) -->
+				<visible>String.IsEqual(Window.Property(show-info),true) + String.IsEqual(Window.Property(fade-black),false)</visible>
+				<!-- When True: Fade in from transparent -->
+				<animation effect="fade" start="0" end="100" time="2000">Visible</animation>
+				<!-- When False: Fade out to transparent -->
+				<animation effect="fade" start="100" end="0" time="2000">Hidden</animation>
+				
+				<right>60</right>
+				<bottom>60</bottom>
+				<width>1800</width>
+				<height>50</height> 
+				<itemgap>0</itemgap>
+				<orientation>vertical</orientation>
+				<control type="label">
+						<width>1800</width>
+						<height>50</height> 
+						<font>font_head_bold</font> 
+						<textcolor>FFFFFFFF</textcolor> 
+						<shadowcolor>FF000000</shadowcolor> 
+						<aligny>bottom</aligny>
+						<align>right</align>
+						<label>$INFO[System.Time]</label>
 				</control>
 		</control>
    </controls>

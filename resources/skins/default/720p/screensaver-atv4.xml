@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <window type="window">
     <controls>
         <control type="image">
@@ -83,7 +83,7 @@
         
         <control type="grouplist" id="32504">
 		        <!-- Render text only when show-info is true AND the shutter is currently open (false) -->
-				<visible>String.IsEqual(Window.Property(show-info),true) + String.IsEqual(Window.Property(fade-black),false)</visible>
+				<visible>String.IsEqual(Window.Property(show-info),true) + String.IsEqual(Window.Property(fade-black),false) + String.IsEqual(Window.Property(poi-fade-out),false)</visible>
 				<!-- When True: Fade in from transparent -->
 				<animation effect="fade" start="0" end="100" time="2000">Visible</animation>
 				<!-- When False: Fade out to transparent -->
@@ -91,33 +91,55 @@
 
                 <left>40</left>
                 <bottom>40</bottom>
-                <width>600</width>
-                <!-- Expanded to 70 to protect the bottom strings -->
-                <height>70</height> 
+                <width>1200</width>
+                <height>80</height> 
                 <itemgap>0</itemgap>
                 <orientation>vertical</orientation>
                 <control type="label">
-                        <width>600</width>
-                        <!-- Expanded to 40 -->
+                        <width>1200</width>
                         <height>40</height> 
                         <font>font_head_bold</font> 
                         <textcolor>FFFFFFFF</textcolor> 
                         <shadowcolor>FF000000</shadowcolor> 
                         <aligny>bottom</aligny>
                         <align>left</align>
-                        <label>$INFO[Window.Property(AerialLocation)]</label>
+                        <label>$INFO[Window.Property(AerialLocationLine1)]</label>
                 </control>
                 <control type="label">
-                        <width>600</width>
-                        <!-- Expanded to 30 -->
-                        <height>30</height> 
-                        <font>font_main</font> 
+                        <width>1200</width>
+                        <height>40</height> 
+                        <font>font_head_bold</font> 
                         <textcolor>FFFFFFFF</textcolor> 
-                        <shadowcolor>FF000000</shadowcolor>
-                        <!-- Switched to top so it hugs the line above it -->
-                        <aligny>top</aligny> 
+                        <shadowcolor>FF000000</shadowcolor> 
+                        <aligny>bottom</aligny>
                         <align>left</align>
-                        <label>$INFO[System.Date], $INFO[System.Time]</label>
+                        <label>$INFO[Window.Property(AerialLocationLine2)]</label>
+                </control>
+        </control>
+
+        <control type="grouplist" id="32505">
+		        <!-- Render text only when show-info is true AND the shutter is currently open (false) -->
+				<visible>String.IsEqual(Window.Property(show-info),true) + String.IsEqual(Window.Property(fade-black),false)</visible>
+				<!-- When True: Fade in from transparent -->
+				<animation effect="fade" start="0" end="100" time="2000">Visible</animation>
+				<!-- When False: Fade out to transparent -->
+				<animation effect="fade" start="100" end="0" time="2000">Hidden</animation>
+
+                <right>40</right>
+                <bottom>40</bottom>
+                <width>1200</width>
+                <height>40</height> 
+                <itemgap>0</itemgap>
+                <orientation>vertical</orientation>
+                <control type="label">
+                        <width>1200</width>
+                        <height>40</height> 
+                        <font>font_head_bold</font> 
+                        <textcolor>FFFFFFFF</textcolor> 
+                        <shadowcolor>FF000000</shadowcolor> 
+                        <aligny>bottom</aligny>
+                        <align>right</align>
+                        <label>$INFO[System.Time]</label>
                 </control>
         </control>
    </controls>
