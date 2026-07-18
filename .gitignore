@@ -81,3 +81,9 @@ resources/entries.json
 resources/checksums.json
 resources/TVIdleScreenStrings.bundle/
 .agents/
+
+# Development scripts
+build_bundle.py
+parse_pois*.py
+scratch*.py
+test_langs.py
